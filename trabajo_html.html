@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualización de Datos</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .chart-container {
+            margin-bottom: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .chart-container h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gráficos Comparativos de Interacciones en Twitter</h1>
+    
+    <div class="chart-container">
+        <h2>Comparación de Retweets y Replies - Tienda Blanquiazul</h2>
+        <div id="chartBlanquiazul"></div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Comparación de Retweets y Replies - Tienda Celeste</h2>
+        <div id="chartCeleste"></div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Comparación de Retweets - Tienda Celeste vs Tienda Blanquiazul</h2>
+        <div id="chartComparativo"></div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Comparación de Replies - Tienda Celeste vs Tienda Blanquiazul</h2>
+        <div id="chartRepliesComparativo"></div>
+    </div>
+
+    <script>
+        // Datos para Tienda Blanquiazul
+        const tweetsBlanquiazul = [
+            { tweet: "Tweet 1", retweets: 200, replies: 100 },
+            { tweet: "Tweet 2", retweets: 800, replies: 600 },
+            { tweet: "Tweet 3", retweets: 50, replies: 30 },
+            { tweet: "Tweet 4", retweets: 20, replies: 10 },
+            { tweet: "Tweet 5", retweets: 10, replies: 5 }
+        ];
+
+        // Datos para Tienda Celeste
+        const tweetsCeleste = [
+            { tweet: "Tweet 1", retweets: 70, replies: 20 },
+            { tweet: "Tweet 2", retweets: 60, replies: 50 },
+            { tweet: "Tweet 3", retweets: 40, replies: 10 },
+            { tweet: "Tweet 4", retweets: 50, replies: 40 },
+            { tweet: "Tweet 5", retweets: 40, replies: 10 }
+        ];
+
+        // Crear gráficos con Plotly.js
+        function crearGraficoComparativo(tweets, title, elementId) {
+            const labels = tweets.map(t => t.tweet);
+            const retweets = tweets.map(t => t.retweets);
+            const replies = tweets.map(t => t.replies);
+
+            const trace1 = {
+                x: labels,
+                y: retweets,
+                name: 'Retweets',
+                type: 'bar',
+                text: retweets.map(String),
+                textposition: 'auto'
+            };
+
+            const trace2 = {
+                x: labels,
+                y: replies,
+                name: 'Replies',
+                type: 'bar',
+                text: replies.map(String),
+                textposition: 'auto'
+            };
+
+            const data = [trace1, trace2];
+
+            const layout = {
+                barmode: 'group',
+                title: title,
+                plot_bgcolor: 'white',
+                paper_bgcolor: 'white',
+                font: {
+                    color: '#333'
+                }
+            };
+
+            Plotly.newPlot(elementId, data, layout);
+        }
+
+        function crearGraficoRetweets(tweetsCeleste, tweetsBlanquiazul) {
+            const labels = tweetsCeleste.map(t => t.tweet);
+            const retweetsCeleste = tweetsCeleste.map(t => t.retweets);
+            const retweetsBlanquiazul = tweetsBlanquiazul.map(t => t.retweets);
+
+            const trace1 = {
+                x: labels,
+                y: retweetsCeleste,
+                name: 'Tienda Celeste',
+                type: 'bar',
+                text: retweetsCeleste.map(String),
+                textposition: 'auto',
+                marker: { color: 'blue' }
+            };
+
+            const trace2 = {
+                x: labels,
+                y: retweetsBlanquiazul,
+                name: 'Tienda Blanquiazul',
+                type: 'bar',
+                text: retweetsBlanquiazul.map(String),
+                textposition: 'auto',
+                marker: { color: 'red' }
+            };
+
+            const data = [trace1, trace2];
+
+            const layout = {
+                barmode: 'group',
+                title: 'Comparación de Retweets - Tienda Celeste vs Tienda Blanquiazul',
+                plot_bgcolor: 'white',
+                paper_bgcolor: 'white',
+                font: {
+                    color: '#333'
+                }
+            };
+
+            Plotly.newPlot('chartComparativo', data, layout);
+        }
+
+        function crearGraficoRepliesComparativo(tweetsCeleste, tweetsBlanquiazul) {
+            const labels = tweetsCeleste.map(t => t.tweet);
+            const repliesCeleste = tweetsCeleste.map(t => t.replies);
+            const repliesBlanquiazul = tweetsBlanquiazul.map(t => t.replies);
+
+            const trace1 = {
+                x: labels,
+                y: repliesCeleste,
+                name: 'Replies Tienda Celeste',
+                type: 'bar',
+                text: repliesCeleste.map(String),
+                textposition: 'auto',
+                marker: { color: 'cyan' }
+            };
+
+            const trace2 = {
+                x: labels,
+                y: repliesBlanquiazul,
+                name: 'Replies Tienda Blanquiazul',
+                type: 'bar',
+                text: repliesBlanquiazul.map(String),
+                textposition: 'auto',
+                marker: { color: 'pink' }
+            };
+
+            const data = [trace1, trace2];
+
+            const layout = {
+                barmode: 'group',
+                title: 'Comparación de Replies - Tienda Celeste vs Tienda Blanquiazul',
+                plot_bgcolor: 'white',
+                paper_bgcolor: 'white',
+                font: {
+                    color: '#333'
+                }
+            };
+
+            Plotly.newPlot('chartRepliesComparativo', data, layout);
+        }
+
+        // Generar gráficos
+        crearGraficoComparativo(tweetsBlanquiazul, 'Comparación de Retweets y Replies - Tienda Blanquiazul', 'chartBlanquiazul');
+        crearGraficoComparativo(tweetsCeleste, 'Comparación de Retweets y Replies - Tienda Celeste', 'chartCeleste');
+        crearGraficoRetweets(tweetsCeleste, tweetsBlanquiazul);
+        crearGraficoRepliesComparativo(tweetsCeleste, tweetsBlanquiazul);
+    </script>
+</body>
+</html>
